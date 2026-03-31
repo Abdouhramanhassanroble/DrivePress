@@ -6,9 +6,6 @@ services:
     volumes:
       - drupal_data:/var/www/html
       - ./themes/custom:/var/www/html/themes/custom
-      - ./modules/custom:/var/www/html/modules/custom
-    environment:
-      - PHP_INI_SCAN_DIR=/usr/local/etc/php/conf.d
     depends_on:
       - db
     restart: unless-stopped
