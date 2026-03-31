@@ -4,21 +4,54 @@
  * page.html.twig — régions du thème.
  */
 #}
-<header>
-  <div class="layout-container">
-    <div class="site-name">
-      <a href="/">ELCA Blog</a>
+{% set live_feed_path = path('entity.node.canonical', {'node': 4}) %}
+{% set login_path = path('user.login') %}
+<header class="site-header" role="banner">
+  <div class="layout-container site-header__inner">
+    <div class="site-header__brand">
+      <a href="{{ path('<front>') }}" class="site-header__logo">{{ 'ELCA Blog'|t }}</a>
     </div>
-    <nav>
-      {{ page.primary_menu }}
+    <input type="checkbox" id="site-header-nav-toggle" class="site-header__nav-toggle">
+    <label for="site-header-nav-toggle" class="site-header__burger" aria-label="{{ 'Ouvrir ou fermer le menu'|t }}">
+      <span class="site-header__burger-bar" aria-hidden="true"></span>
+      <span class="site-header__burger-bar" aria-hidden="true"></span>
+      <span class="site-header__burger-bar" aria-hidden="true"></span>
+    </label>
+    <nav class="site-header__nav" aria-label="{{ 'Navigation principale'|t }}">
+      <ul class="site-header__menu">
+        <li class="site-header__item">
+          <a href="{{ path('<front>') }}" class="site-header__link{{ is_front ? ' is-active' : '' }}">{{ 'Accueil'|t }}</a>
+        </li>
+        <li class="site-header__item">
+          <a href="{{ live_feed_path }}" class="site-header__link{{ app.request.pathinfo == live_feed_path ? ' is-active' : '' }}">{{ 'Fil en direct'|t }}</a>
+        </li>
+        {% if logged_in %}
+          <li class="site-header__item">
+            <a href="{{ path('entity.user.canonical', {'user': user.id}) }}" class="site-header__link">{{ 'Mon compte'|t }}</a>
+          </li>
+        {% else %}
+          <li class="site-header__item">
+            <a href="{{ login_path }}" class="site-header__link site-header__link--cta{{ app.request.pathinfo == login_path ? ' is-active' : '' }}">{{ 'Se connecter'|t }}</a>
+          </li>
+        {% endif %}
+      </ul>
     </nav>
   </div>
 </header>
 
+<div class="hero">
+  <div class="layout-container">
+    <h1>ELCA Blog</h1>
+    <p>Développement web, innovation digitale et bonnes pratiques</p>
+  </div>
+</div>
+
 <main class="layout-container">
-  {% if page.content %}
-    {{ page.content }}
-  {% endif %}
+  <div class="articles-grid">
+    {% if page.content %}
+      {{ page.content }}
+    {% endif %}
+  </div>
 </main>
 
 <footer>
