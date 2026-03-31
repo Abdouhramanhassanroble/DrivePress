@@ -1,0 +1,13 @@
+<article class="page-full">
+  <header class="article-full__header">
+    <h1 class="article-full__title">{{ label }}</h1>
+  </header>
+
+  {% if content.body %}
+    <div class="article-full__body">
+      {{ content.body }}
+    </div>
+  {% endif %}
+
+  <div id="elca-react-root" style="margin-top: 2rem;"></div>
+</article>

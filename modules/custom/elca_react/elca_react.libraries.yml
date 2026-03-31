@@ -1,0 +1,5 @@
+article_list:
+  js:
+    js/dist/bundle.js: {}
+  dependencies:
+    - core/drupal

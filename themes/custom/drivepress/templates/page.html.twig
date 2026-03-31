@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ head_title }}</title>
-  {{ head }}
-  {{ page.styles }}
-</head>
-<body>
-
+{#
+/**
+ * @file
+ * page.html.twig — régions du thème.
+ */
+#}
 <header>
   <div class="layout-container">
     <div class="site-name">
@@ -31,8 +26,3 @@
     <p>&copy; {{ "now"|date("Y") }} ELCA Blog — Développement web & innovation digitale</p>
   </div>
 </footer>
-
-{{ page.scripts }}
-
-</body>
-</html>

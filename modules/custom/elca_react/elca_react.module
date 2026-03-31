@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_page_attachments().
+ */
+function elca_react_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'elca_react/article_list';
+  $attachments['#attached']['drupalSettings']['elcaReact'] = [
+    'apiUrl' => '/jsonapi/node/article',
+  ];
+}

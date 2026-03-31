@@ -1,0 +1,5 @@
+name: 'ELCA React'
+type: module
+description: 'Intègre un composant React branché sur JSON:API Drupal'
+core_version_requirement: ^10
+package: Custom

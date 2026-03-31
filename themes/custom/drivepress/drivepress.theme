@@ -3,3 +3,12 @@
 function drivepress_preprocess_page(&$variables) {
   $variables['#attached']['library'][] = 'drivepress/global';
 }
+
+function drivepress_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  $body = $node->get('body')->value;
+  $clean = strip_tags($body);
+  $clean = html_entity_decode($clean, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+  $clean = preg_replace('/\s+/', ' ', $clean);
+  $variables['excerpt'] = mb_substr(trim($clean), 0, 150);
+}
