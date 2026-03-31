@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ head_title }}</title>
+  {{ head }}
+  {{ page.styles }}
+</head>
+<body>
+
+<header>
+  <div class="layout-container">
+    <div class="site-name">
+      <a href="/">DrivePress</a>
+    </div>
+    <nav>
+      {{ page.primary_menu }}
+    </nav>
+  </div>
+</header>
+
+<main class="layout-container">
+  {% if page.content %}
+    {{ page.content }}
+  {% endif %}
+</main>
+
+<footer>
+  <div class="layout-container">
+    <p>&copy; {{ "now"|date("Y") }} DrivePress — Projet de démonstration</p>
+  </div>
+</footer>
+
+{{ page.scripts }}
+
+</body>
+</html>
