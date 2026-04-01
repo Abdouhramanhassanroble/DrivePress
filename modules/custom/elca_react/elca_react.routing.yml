@@ -1,0 +1,7 @@
+elca_react.my_articles:
+  path: '/mes-articles'
+  defaults:
+    _controller: '\Drupal\elca_react\Controller\MyArticlesController::content'
+    _title: 'Mes articles'
+  requirements:
+    _permission: 'create article content'
