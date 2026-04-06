@@ -1,17 +1,105 @@
 {#
 /**
  * @file
- * Affichage profil utilisateur custom.
+ * Affichage profil utilisateur custom — DrivePress.
  */
 #}
-<article class="user-profile-card">
-  <img src="/themes/custom/drivepress/css/assets/ELCA_Informatik_logo.svg" alt="{{ 'ELCA'|t }}" class="user-profile-card__logo">
-  <h1 class="user-profile-card__title">{{ 'Bienvenue'|t }} {{ user.getDisplayName }}</h1>
-  <p class="user-profile-card__line">
-    {{ 'Vous êtes'|t }} <strong>{{ profile_role_label }}</strong>.
-  </p>
-  <p class="user-profile-card__line">
-    {{ 'Vous êtes membre d’ELCA Blog depuis le'|t }} <strong>{{ profile_member_since }}</strong>.
-  </p>
-</article>
+<div class="profile">
 
+  {# ── Header card ── #}
+  <div class="profile__card">
+    <div class="profile__avatar-wrapper">
+      {% if profile_picture %}
+        <img src="{{ profile_picture }}" alt="{{ profile_name }}" class="profile__avatar">
+      {% else %}
+        <div class="profile__avatar profile__avatar--default">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      {% endif %}
+      {% if is_own_profile and profile_edit_url %}
+        <a href="{{ profile_edit_url }}" class="profile__avatar-edit" title="{{ 'Changer la photo'|t }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <h1 class="profile__name">{{ profile_name }}</h1>
+    <span class="profile__role">{{ profile_role_label }}</span>
+
+    <div class="profile__meta">
+      <div class="profile__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        {{ 'Membre depuis le'|t }} <strong>{{ profile_member_since }}</strong>
+      </div>
+      {% if profile_email %}
+        <div class="profile__meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+          {{ profile_email }}
+        </div>
+      {% endif %}
+      <div class="profile__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <strong>{{ profile_article_count }}</strong> {{ 'article(s) publié(s)'|t }}
+      </div>
+    </div>
+
+    {% if is_own_profile and profile_edit_url %}
+      <a href="{{ profile_edit_url }}" class="profile__edit-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        {{ 'Modifier mon profil'|t }}
+      </a>
+    {% endif %}
+  </div>
+
+  {# ── Articles section ── #}
+  <div class="profile__articles">
+    <h2 class="profile__articles-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+      </svg>
+      {% if is_own_profile %}
+        {{ 'Mes articles'|t }}
+      {% else %}
+        {{ 'Articles publiés'|t }}
+      {% endif %}
+    </h2>
+
+    {% if profile_articles|length > 0 %}
+      <ul class="profile__articles-list">
+        {% for article in profile_articles %}
+          <li class="profile__articles-item">
+            <a href="{{ article.url }}" class="profile__articles-link">
+              <span class="profile__articles-link-title">{{ article.title }}</span>
+              <span class="profile__articles-link-date">{{ article.created }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="profile__articles-empty">
+        {% if is_own_profile %}
+          {{ "Vous n'avez pas encore publié d'article."|t }}
+          <a href="/node/add/article">{{ 'Créer mon premier article'|t }}</a>
+        {% else %}
+          {{ "Aucun article publié pour le moment."|t }}
+        {% endif %}
+      </p>
+    {% endif %}
+  </div>
+
+</div>

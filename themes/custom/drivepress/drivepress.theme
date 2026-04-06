@@ -18,6 +18,7 @@ function drivepress_preprocess_node(&$variables) {
  */
 function drivepress_preprocess_user(&$variables) {
   $account = $variables['user'];
+  $current_user = \Drupal::currentUser();
 
   $roles = array_filter($account->getRoles(), function ($role) {
     return $role !== 'authenticated';
@@ -35,6 +36,28 @@ function drivepress_preprocess_user(&$variables) {
 
   $variables['profile_member_since'] = \Drupal::service('date.formatter')
     ->format($account->getCreatedTime(), 'custom', 'd/m/Y');
+
+  // User picture URL.
+  $variables['profile_picture'] = NULL;
+  if ($account->hasField('user_picture') && !$account->get('user_picture')->isEmpty()) {
+    $file = $account->get('user_picture')->entity;
+    if ($file) {
+      $variables['profile_picture'] = \Drupal::service('file_url_generator')
+        ->generateAbsoluteString($file->getFileUri());
+    }
+  }
+
+  // Profile email & display name.
+  $variables['profile_email'] = $account->getEmail();
+  $variables['profile_name'] = $account->getDisplayName();
+
+  // Edit link (only if viewing own profile or has admin permission).
+  $variables['profile_edit_url'] = NULL;
+  if ($current_user->id() == $account->id() || $current_user->hasPermission('administer users')) {
+    $variables['profile_edit_url'] = $account->toUrl('edit-form')->toString();
+  }
+
+  $variables['is_own_profile'] = ($current_user->id() == $account->id());
 
   // Build "Mes articles" list for this profile page.
   $query = \Drupal::entityTypeManager()->getStorage('node')->getQuery()
@@ -56,6 +79,8 @@ function drivepress_preprocess_user(&$variables) {
       ];
     }
   }
+
+  $variables['profile_article_count'] = count($variables['profile_articles']);
 
   if (isset($variables['content']['member_for']['#title'])) {
     $variables['content']['member_for']['#title'] = t('Membre depuis');
