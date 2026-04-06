@@ -376,26 +376,23 @@ main.layout-container {
 /* ── Grille liste d’articles ──
    Colonnes à largeur bornée + justify-content:center → 1, 2 ou 3 cartes groupées au centre. */
 .articles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
-  justify-content: center;
-  gap: clamp(1.25rem, 3vw, 2rem);
-  align-items: stretch;
   width: 100%;
 }
 
-/* Drupal encapsule souvent la liste dans un wrapper unique (view/content).
-   On remet ce wrapper en grille pour éviter la colonne unique. */
-.articles-grid > *:has(.article-card) {
+.articles-grid [class*="js-view-dom-id-"] {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 360px));
-  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
   gap: clamp(1.25rem, 3vw, 2rem);
   width: 100%;
 }
 
-.articles-grid > *:has(.article-card) .article-card {
+.articles-grid .views-row {
+  min-width: 0;
+}
+
+.articles-grid .article-card {
   height: 100%;
+  width: 100%;
 }
 
 
@@ -1619,9 +1616,6 @@ footer p {
 
 /* ── Mobile ── */
 @media (max-width: 900px) {
-  .articles-grid:not(:has(.article-full)) {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 340px));
-  }
 
   .hero h1 {
     font-size: 2rem;
@@ -1641,11 +1635,7 @@ footer p {
     padding-inline: 1rem;
   }
 
-  .articles-grid:not(:has(.article-full)) {
-    grid-template-columns: minmax(0, 1fr);
-    max-width: 100%;
-    margin-inline: auto;
-  }
+  
 
   .hero h1 {
     font-size: 1.75rem;
@@ -1785,41 +1775,21 @@ footer p {
 
 /* ── Homepage grid ── */
 body.path-frontpage main.layout-container {
-  max-width: 100% !important;
-  width: 100% !important;
-  padding-inline: clamp(1.5rem, 4vw, 4rem) !important;
+  max-width: 100%;
+  width: 100%;
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
   margin: 0 auto;
   padding-top: 2rem;
-  box-sizing: border-box;
 }
 
-body.path-frontpage .articles-grid {
-  display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important;
-  gap: 1.6rem !important;
-  width: 100% !important;
+@media (max-width: 980px) {
+  .articles-grid [class*="js-view-dom-id-"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-body.path-frontpage .articles-grid > .contextual-region,
-body.path-frontpage .articles-grid > [class*="js-view-dom-id-"] {
-  display: contents !important;
-}
-
-body.path-frontpage .articles-grid .contextual {
-  display: none !important;
-}
-
-body.path-frontpage .articles-grid .views-row {
-  min-width: 0;
-}
-
-body.path-frontpage .articles-grid .article-card {
-  width: 100%;
-  height: 100%;
-}
-
-@media (max-width: 680px) {
-  body.path-frontpage .articles-grid {
-    grid-template-columns: 1fr !important;
+@media (max-width: 640px) {
+  .articles-grid [class*="js-view-dom-id-"] {
+    grid-template-columns: 1fr;
   }
 }

@@ -4,3 +4,5 @@ global:
       css/style.css: {}
   js:
     js/app.js: {}
+  dependencies:
+    - core/underscore
